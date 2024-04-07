@@ -21,17 +21,16 @@ pip install mojopack
 After installation, you can use the `mojopack` command from your terminal.
 
 ```
-usage: mojopack [-h] {list,search,install} ...
+usage: mojopack.py [-h] {list,install,search} [name]
 
 Manage packages for the Mojo programming language.
 
 positional arguments:
-  {list,search,install}
-    list                List available packages
-    search              Search for packages
-    install             Install a package
+  {list,install,search}
+                        Action to perform.
+  name                  Name of the directory to install or search for.
 
-optional arguments:
+options:
   -h, --help            show this help message and exit
 ```
 
