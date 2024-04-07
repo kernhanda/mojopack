@@ -8,7 +8,7 @@ from tqdm import tqdm
 
 def list_directories(repo_url, owner, repo_name):
     """
-    List all directories under the specified GitHub repository.
+    List all packages
     """
     api_url = urljoin(repo_url, f"repos/{owner}/{repo_name}/contents")
     response = requests.get(api_url)
@@ -23,7 +23,7 @@ def list_directories(repo_url, owner, repo_name):
 
 def install_directory(repo_url, owner, repo_name, directory_name, target_path):
     """
-    Install the specified directory from the GitHub repository.
+    Install the specified package
     """
     api_url = urljoin(repo_url, f"repos/{owner}/{repo_name}/contents/{directory_name}")
     response = requests.get(api_url)
@@ -55,19 +55,19 @@ def search_directories(repo_url, owner, repo_name, search_term):
     matching_directories = [d for d in directories if search_term.lower() in d.lower()]
     return matching_directories
 
-if __name__ == "__main__":
+def main():
     repo_url = "https://api.github.com"
-    owner = "modularml"
-    repo_name = "mojo"
+    owner = "kernhanda"
+    repo_name = "mojo-packages"
 
-    parser = argparse.ArgumentParser(description="Manage packages in a GitHub repository.")
+    parser = argparse.ArgumentParser(description="Manage packages for the Mojo programming language.")
     parser.add_argument("action", choices=["list", "install", "search"], help="Action to perform.")
-    parser.add_argument("name", nargs="?", help="Name of the directory to install or search for.")
+    parser.add_argument("name", nargs="?", help="Name of the package to install or search for.")
     args = parser.parse_args()
 
     if args.action == "list":
         directories = list_directories(repo_url, owner, repo_name)
-        print("Directories in the repository:")
+        print("Packages available:")
         for directory in directories:
             print(f"- {directory}")
 
@@ -77,16 +77,19 @@ if __name__ == "__main__":
             install_directory(repo_url, owner, repo_name, args.name, target_path)
             print(f"Installed {args.name} to {target_path}")
         else:
-            print("Please provide a directory name to install.")
+            print("Please provide a package name to install.")
 
     elif args.action == "search":
         if args.name:
             matching_directories = search_directories(repo_url, owner, repo_name, args.name)
             if matching_directories:
-                print(f"Directories matching '{args.name}':")
+                print(f"Packages matching '{args.name}':")
                 for directory in matching_directories:
                     print(f"- {directory}")
             else:
-                print(f"No directories found matching '{args.name}'.")
+                print(f"No packages found matching '{args.name}'.")
         else:
             print("Please provide a search term.")
+
+if __name__ == "__main__":
+    main()
